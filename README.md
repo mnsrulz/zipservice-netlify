@@ -1,1 +1,2 @@
-# zipservice-netlify
+# nurlresolver-netlify
+nurlresolver host on netlify

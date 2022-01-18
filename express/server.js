@@ -8,6 +8,7 @@ const url = require('url');
 const router = express.Router();
 const unzipper = require('unzipper');
 const cors = require('cors');
+const got = require('got');
 
 router.get('/', (req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/html' });

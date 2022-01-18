@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 router.get('/list', async(req, res) => {
     const { q } = req.query;
     if (q) {
-        const directory = await unzipper.Open.url(zipRequestProxy(), zipFileUrl);
+        const directory = await unzipper.Open.url(zipRequestProxy(), q);
         const result = directory.files.filter(f => f.type === 'File').map(({
             path,
             compressedSize,

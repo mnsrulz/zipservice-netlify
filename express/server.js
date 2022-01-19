@@ -22,6 +22,11 @@ router.get('/download', async(req, res) => {
         const directory = await unzipper.Open.url(zipRequestProxy, q);
         const file = directory.files.find(x => x.type === 'File' && x.path === f);
         if (file) {
+            res.writeHead(200, {
+                'Content-Length': file.uncompressedSize,
+                'Content-Type': 'application/octet-stream',
+                'Content-Disposition': `attachment; filename=${path.basename(file.path)}`
+            });
             file.stream().pipe(res);
         } else {
             res.status(400).json({

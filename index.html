@@ -58,7 +58,7 @@
                                     <div class="ui primary button" v-if="isResolving">Cancel</div>
                                     <button class="ui primary button" v-bind:class="{ disabled: isResolving }" v-else>Resolve</button>
                                 </div>
-                                <h4 class="ui dividing header">Options</h4>
+                                <!-- <h4 class="ui dividing header">Options</h4>
                                 <div v-bind:class="{ disabled: isResolving }">
                                     <div class="field ">
                                         <div class="ui checkbox">
@@ -72,20 +72,38 @@
                                             <label>Recursive</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
-                        </div>
-                    </div>
-                    <div>
-                        <div v-for="file in files">
-                            <a v-bind:href="`/.netlify/functions/server/download?q=${encodeURIComponent(queryUrl)}&f=${encodeURIComponent(file.path)}`">
-                                {{ file.path }}
-                            </a>
                         </div>
                     </div>
                     <div class="row" v-if="hasOutput">
                         <div class="column">
-                            <h4 class="ui dividing header">Output</h4>
+                            <table class="ui celled striped table">
+                                <thead>
+                                    <tr>
+                                        <th> File path</th>
+                                        <th> Size (Compressed)</th>
+                                        <th> Size (Uncompressed)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="file in files">
+                                        <td class="collapsing">
+                                            <i class="file icon"></i>
+                                            <a v-bind:href="`/.netlify/functions/server/download?q=${encodeURIComponent(queryUrl)}&f=${encodeURIComponent(file.path)}`">
+                                            {{ file.path }}
+                                        </a>
+                                        </td>
+                                        <td>{{file.compressedSize}}</td>
+                                        <td class="right aligned collapsing">{{file.uncompressedSize}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" v-if="hasOutput">
+                        <div class="column">
+                            <h4 class="ui dividing header">JSON API Output</h4>
                             <div class="ui tertiary segment">
                                 <pre>{{output}}</pre>
                             </div>

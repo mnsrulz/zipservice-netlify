@@ -21,7 +21,12 @@ router.get('/download', async(req, res) => {
     if (q && f) {
         const directory = await unzipper.Open.url(zipRequestProxy, q);
         const file = directory.files.find(f => f.type === 'File' && f.path === f);
-        file.stream.pipe(res);
+        if (file) {
+            file.stream().pipe(res);
+        } else {
+            res.status(400).json({ error: 'file not found' });
+        }
+
     } else {
         res.status(400).json({ error: 'Query param q or f not defined' });
     }

@@ -20,7 +20,7 @@ router.get('/download', async(req, res) => {
     const { q, f } = req.query;
     if (q && f) {
         const directory = await unzipper.Open.url(zipRequestProxy, q);
-        const file = directory.files.find(f => (f.type === 'File' && f.path === f));
+        const file = directory.files.find(x => x.type === 'File' && x.path === f);
         if (file) {
             file.stream().pipe(res);
         } else {

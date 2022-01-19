@@ -16,10 +16,20 @@ router.get('/', (req, res) => {
     res.end();
 });
 
+router.get('/download', async(req, res) => {
+    const { q, f } = req.query;
+    if (q && f) {
+        const directory = await unzipper.Open.url(zipRequestProxy, q);
+        const file = directory.files.find(f => f.type === 'File' && f.path === f);
+        file.stream.pipe(res);
+    } else {
+        res.status(400).json({ error: 'Query param q or f not defined' });
+    }
+});
 router.get('/list', async(req, res) => {
     const { q } = req.query;
     if (q) {
-        const directory = await unzipper.Open.url(zipRequestProxy(), q);
+        const directory = await unzipper.Open.url(zipRequestProxy, q);
         const result = directory.files.filter(f => f.type === 'File').map(({
             path,
             compressedSize,
@@ -53,16 +63,12 @@ app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router); // path must route to lambda
 app.use('/', (req, res) => res.sendFile(path.join(__dirname, '../index.html')));
 
-const zipRequestProxy = () => {
-    //{ url: string, headers: Record<string, string> }
-    return function(options) {
-        const { url, headers } = options;
-        //console.log(`calling url '${url}' with following headers ${JSON.stringify(headers)}...`);
-        const stream = got.stream(url, { headers });
-        //resp0111.on('response', (r01) => { console.log(r01.headers); });
-        var proxy = Object.assign(stream, { abort: stream.destroy });
-        return proxy;
-    }
+//options: { url: string, headers: Record<string, string> }
+const zipRequestProxy = (options) => {
+    const { url, headers } = options;
+    const stream = got.stream(url, { headers });
+    var proxy = Object.assign(stream, { abort: stream.destroy });
+    return proxy;
 }
 
 module.exports = app;

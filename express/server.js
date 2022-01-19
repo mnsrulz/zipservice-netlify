@@ -24,7 +24,14 @@ router.get('/download', async(req, res) => {
         if (file) {
             file.stream().pipe(res);
         } else {
-            res.status(400).json({ error: 'file not found' });
+            res.status(400).json({
+                error: 'file not found',
+                query: {
+                    q,
+                    f
+                },
+                availableFiles: directory.files.map(x => x.path)
+            });
         }
 
     } else {

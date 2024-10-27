@@ -75,7 +75,7 @@
                                     <tr v-for="file in files">
                                         <td class="collapsing">
                                             <i class="file icon"></i>
-                                            <a target="_blank" v-bind:href="`/.netlify/functions/server/download?q=${encodeURIComponent(queryUrl)}&f=${encodeURIComponent(file.path)}`">
+                                            <a target="_blank" v-bind:href="`https://zipservice-deno.deno.dev/download?q=${encodeURIComponent(queryUrl)}&f=${encodeURIComponent(file.path)}`">
                                             {{ file.path }}
                                         </a>
                                         </td>
@@ -158,7 +158,7 @@
                         };
 
                         const queryParams = encodeFormData(queryObject);
-                        const url = '.netlify/functions/server/list?' + queryParams;
+                        const url = 'https://zipservice-deno.deno.dev/list?' + queryParams;
 
                         const response = await fetch(url, {
                             method: 'GET',
